@@ -18,12 +18,29 @@
 #>
 
 param(
-    [Parameter(Position=0, Mandatory=$true, HelpMessage="Remote target (e.g. user@hostname)")]
+    [Parameter(Position = 0, Mandatory = $false)]
     [string]$Target,
 
     [Alias('Port')]
     [int]$p = 22
 )
+
+if ([string]::IsNullOrWhiteSpace($Target)) {
+    Write-Host "--------------------------------------------------------" -ForegroundColor Cyan
+    Write-Host " SSH Copy Key - Parameter Menu" -ForegroundColor White
+    Write-Host "--------------------------------------------------------" -ForegroundColor Cyan
+    Write-Host "Usage: .\ssh-copy-key.ps1 <Target> [-p <Port>]" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "Parameters:" -ForegroundColor Green
+    Write-Host "  Target (Pos 0) : Remote user and host (e.g. user@192.168.1.10)"
+    Write-Host "  -p     (Alias) : SSH Port (Default: 22)"
+    Write-Host ""
+    Write-Host "Examples:" -ForegroundColor Green
+    Write-Host "  .\ssh-copy-key.ps1 user@host"
+    Write-Host "  .\ssh-copy-key.ps1 user@host -p 2222"
+    Write-Host "--------------------------------------------------------" -ForegroundColor Cyan
+    exit 0
+}
 
 # Set up paths
 $sshDir = "$env:USERPROFILE\.ssh"
@@ -39,7 +56,8 @@ if (Test-Path $sshDir) {
             break
         }
     }
-} else {
+}
+else {
     Write-Error "SSH directory not found at $sshDir"
     exit 1
 }
@@ -76,9 +94,11 @@ try {
     if ($LASTEXITCODE -eq 0) {
         Write-Host "Successfully added key to '$Target'." -ForegroundColor Green
         Write-Host "Try logging in with: ssh -p $p $Target" -ForegroundColor Gray
-    } else {
+    }
+    else {
         Write-Error "Failed to copy key. SSH exited with code $LASTEXITCODE."
     }
-} catch {
+}
+catch {
     Write-Error "An error occurred while executing ssh: $_"
 }
