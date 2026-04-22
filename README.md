@@ -10,3 +10,27 @@ To copy your public ssh key to a remote Linux server via PowerShell use
 the following syntax.
 
 > ssh-copy-key -p 2222 usr@192.168.116.xx
+
+
+getInstalledSoftwareList.ps1
+------------------------------------------------------------------------
+Creates a CSV inventory of installed software on the local Windows machine.
+
+The script scans the standard uninstall registry locations, filters out
+system-component noise by default, and writes `InstalledSoftware.csv`
+beside the script.
+
+Columns in the CSV:
+
+> Softwarename, Current Version, Latest Version
+
+If `winget` is installed, the script will try to populate `Latest Version`
+for apps where a trustworthy upgrade match exists.
+
+Examples:
+
+> .\getInstalledSoftwareList.ps1
+
+> .\getInstalledSoftwareList.ps1 -OutputPath C:\Temp\InstalledSoftware.csv
+
+> .\getInstalledSoftwareList.ps1 -IncludeSystemComponents
