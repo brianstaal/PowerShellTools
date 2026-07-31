@@ -11,6 +11,9 @@ the following syntax.
 
 > ssh-copy-key -p 2222 usr@192.168.116.xx
 
+If you don't have a ssh key on your Windows you can generate one:
+> ssh-keygen -t ed25519 -C "your_email@example.com"
+
 
 getInstalledSoftwareList.ps1
 ------------------------------------------------------------------------
